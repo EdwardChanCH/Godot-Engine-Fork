@@ -1158,7 +1158,7 @@ void EditorHelp::_update_doc() {
 		section_line.push_back(Pair<String, int>(TTR("Online Tutorials"), class_desc->get_paragraph_count() - 2));
 		description_line = class_desc->get_paragraph_count() - 2;
 		_push_title_font();
-		class_desc->add_text(TTR("Online Tutorials"));
+		class_desc->add_text(DTR("Online Tutorials")); // TTTODO new
 		_pop_title_font();
 
 		class_desc->add_newline();
@@ -1220,7 +1220,7 @@ void EditorHelp::_update_doc() {
 
 		section_line.push_back(Pair<String, int>(TTR("Properties"), class_desc->get_paragraph_count() - 2));
 		_push_title_font();
-		class_desc->add_text(TTR("Properties"));
+		class_desc->add_text(DTR("Properties")); // TTTODO new
 		_pop_title_font();
 
 		class_desc->add_newline();
