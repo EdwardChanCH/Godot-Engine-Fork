@@ -77,6 +77,7 @@ String ScriptEditorBase::get_document_name() const {
 	name = edited_res->get_path().get_file();
 	if (name.is_empty()) {
 		// This appears for newly created built-in text_files before saving the scene.
+		// TTTODO 1
 		name = TTR("[unsaved]");
 	} else if (edited_res->is_built_in()) {
 		const String &text_file_name = edited_res->get_name();

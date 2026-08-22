@@ -2468,6 +2468,7 @@ int EditorNode::_save_external_resources(bool p_also_save_external_data) {
 	if (p_also_save_external_data) {
 		for (int i = 0; i < editor_data.get_editor_plugin_count(); i++) {
 			EditorPlugin *plugin = editor_data.get_editor_plugin(i);
+			// TTTODO 2
 			if (!plugin->get_unsaved_status().is_empty()) {
 				plugin->save_external_data();
 				saved++;
@@ -2721,6 +2722,7 @@ bool EditorNode::is_scene_unsaved(int p_idx) {
 	if (!scene_path.is_empty()) {
 		// Check if scene has unsaved changes in built-in resources.
 		for (int j = 0; j < editor_data.get_editor_plugin_count(); j++) {
+			// TTTODO 2
 			if (!editor_data.get_editor_plugin(j)->get_unsaved_status(scene_path).is_empty()) {
 				return true;
 			}
@@ -2730,6 +2732,7 @@ bool EditorNode::is_scene_unsaved(int p_idx) {
 }
 
 void EditorNode::_dialog_action(String p_file) {
+	print_line("_dialog_action()", ", p_file = ", p_file); // TTTODO test
 	switch (current_menu_option) {
 		case SCENE_NEW_INHERITED_SCENE: {
 			Node *scene = editor_data.get_edited_scene_root();
@@ -2758,6 +2761,7 @@ void EditorNode::_dialog_action(String p_file) {
 		case SCENE_TAB_SAVE_SCENE:
 		case SCENE_TAB_SAVE_AS_MAIN_SCENE:
 		case SCENE_TAB_SAVE_AS_AND_RUN: {
+			print_line("case 1b"); // TTTODO test
 			int scene_idx = -1;
 			if (current_menu_option == SCENE_CLOSE || current_menu_option == SCENE_TAB_CLOSE) {
 				scene_idx = tab_closing_idx;
@@ -3461,6 +3465,8 @@ static String _get_unsaved_scene_dialog_text(String p_scene_filename, uint64_t p
 }
 
 void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
+	print_line("_menu_option_confirm()", ", p_option = ", p_option, ", p_confirmed = ", p_confirmed); // TTTODO test
+
 	if (!p_confirmed) { // FIXME: this may be a hack.
 		current_menu_option = (MenuOptions)p_option;
 	}
@@ -3519,6 +3525,7 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 				}
 				tabs_to_close.push_back(editor_data.get_scene_path(i));
 			}
+			// TTTODO 9
 			_proceed_closing_scene_tabs();
 		} break;
 		case EditorSceneTabs::SCENE_CLOSE_RIGHT: {
@@ -3526,6 +3533,7 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 			for (int i = scene_tabs->get_option_tab() + 1; i < editor_data.get_edited_scene_count(); i++) {
 				tabs_to_close.push_back(editor_data.get_scene_path(i));
 			}
+			// TTTODO 9
 			_proceed_closing_scene_tabs();
 		} break;
 		case SCENE_CLOSE_ALL: {
@@ -3533,17 +3541,21 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 			for (int i = 0; i < editor_data.get_edited_scene_count(); i++) {
 				tabs_to_close.push_back(editor_data.get_scene_path(i));
 			}
+			// TTTODO 9
 			_proceed_closing_scene_tabs();
 		} break;
 		case SCENE_CLOSE: {
+			// TTTODO 8
 			_scene_tab_closed(editor_data.get_edited_scene());
 		} break;
 		case EditorSceneTabs::SCENE_CLOSE: {
+			// TTTODO 8
 			_scene_tab_closed(scene_tabs->get_option_tab());
 		} break;
 		case SCENE_TAB_CLOSE:
 		case SCENE_SAVE_SCENE:
 		case EditorSceneTabs::SCENE_SAVE_SCENE: {
+			print_line("case 1c"); // TTTODO test
 			int scene_idx = -1;
 			if (p_option == SCENE_TAB_CLOSE) {
 				scene_idx = tab_closing_idx;
@@ -3574,6 +3586,7 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 		case SCENE_MULTI_SAVE_AS_SCENE:
 		case SCENE_SAVE_AS_SCENE:
 		case EditorSceneTabs::SCENE_SAVE_AS_SCENE: {
+			print_line("case 1d"); // TTTODO test
 			int scene_idx = -1;
 			if (p_option == SCENE_TAB_CLOSE) {
 				scene_idx = tab_closing_idx;
@@ -3627,6 +3640,7 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 				root_name = EditorNode::adjust_scene_name_casing(root_name);
 				file->set_current_path(root_name + "." + extensions.front()->get().to_lower());
 			}
+			print_line("case -1a"); // TTTODO test
 			file->set_title(TTR("Save Scene As..."));
 			file->popup_file_dialog();
 
@@ -3740,6 +3754,8 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 
 			if (unsaved_cache) {
 				if (!p_confirmed) {
+					// TTTODO 6
+					print_line("case 2"); // TTTODO test
 					confirmation->set_ok_button_text(TTRC("Save & Reload"));
 					const String unsaved_message = _get_unsaved_scene_dialog_text(scene_filename, scene_time_opened);
 					confirmation->set_text(unsaved_message + "\n\n" + TTR("Save before reloading the scene?"));
@@ -3811,26 +3827,34 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 		case PROJECT_QUIT_TO_PROJECT_MANAGER:
 		case TOOLS_CLEAR_PROJECT_CACHE:
 		case PROJECT_RELOAD_CURRENT_PROJECT: {
+			// TTTODO 0
+			print_line("case 1a"); // TTTODO test
+
 			if (p_confirmed && plugin_to_save) {
+				print_line("case 7a"); // TTTODO test
 				plugin_to_save->save_external_data();
 				p_confirmed = false;
 			}
 
 			if (p_confirmed && stop_project_confirmation && project_run_bar->is_playing()) {
+				print_line("case 7b"); // TTTODO test
 				project_run_bar->stop_playing();
 				stop_project_confirmation = false;
 				p_confirmed = false;
 			}
 
 			if (p_confirmed && stop_download_confirmation && export_template_manager->is_downloading()) {
+				print_line("case 7c"); // TTTODO test
 				export_template_manager->stop_download();
 				stop_download_confirmation = false;
 				p_confirmed = false;
 			}
 
+			// TTTODO 0
 			bool is_restart = (p_option == PROJECT_RELOAD_CURRENT_PROJECT || p_option == TOOLS_CLEAR_PROJECT_CACHE);
 			if (!p_confirmed) {
 				if (!stop_project_confirmation && project_run_bar->is_playing()) {
+					print_line("case 7d"); // TTTODO test
 					if (is_restart) {
 						confirmation->set_text(TTR("Stop running project before reloading the current project?"));
 						confirmation->set_ok_button_text(TTR("Stop & Reload"));
@@ -3846,6 +3870,7 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 				}
 
 				if (!stop_download_confirmation && export_template_manager->is_downloading()) {
+					print_line("case 7e"); // TTTODO test
 					confirmation->set_text(TTR("The export templates are still being downloaded."));
 					if (is_restart) {
 						confirmation->set_ok_button_text(TTR("Stop & Reload"));
@@ -3861,11 +3886,15 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 
 				bool save_each = EDITOR_GET("interface/editor/behavior/save_each_scene_on_quit");
 				if (_next_unsaved_scene(!save_each) == -1) {
+					print_line("case 7f"); // TTTODO test
 					if (EditorUndoRedoManager::get_singleton()->is_history_unsaved(EditorUndoRedoManager::GLOBAL_HISTORY)) {
 						if (is_restart) {
+							// TTTODO 6
+							print_line("case 3a"); // TTTODO test
 							save_confirmation->set_ok_button_text(TTR("Save & Reload"));
 							save_confirmation->set_text(TTR("Save modified resources before reloading?"));
 						} else {
+							print_line("case 3b"); // TTTODO test
 							save_confirmation->set_ok_button_text(TTR("Save & Quit"));
 							save_confirmation->set_text(TTR("Save modified resources before closing?"));
 						}
@@ -3876,12 +3905,16 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 
 					plugin_to_save = nullptr;
 					for (int i = 0; i < editor_data.get_editor_plugin_count(); i++) {
+						// TTTODO 2
 						const String unsaved_status = editor_data.get_editor_plugin(i)->get_unsaved_status();
 						if (!unsaved_status.is_empty()) {
 							if (is_restart) {
+								// TTTODO 6
+								print_line("case 4a"); // TTTODO test
 								save_confirmation->set_ok_button_text(TTR("Save & Reload"));
 								save_confirmation->set_text(unsaved_status);
 							} else {
+								print_line("case 4b"); // TTTODO test
 								save_confirmation->set_ok_button_text(TTR("Save & Quit"));
 								save_confirmation->set_text(unsaved_status);
 							}
@@ -3893,20 +3926,26 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 					}
 
 					if (plugin_to_save) {
+						print_line("case 6a"); // TTTODO test
 						break;
 					}
 
+					print_line("case 6b"); // TTTODO test
 					_discard_changes();
 					break;
 				}
 
 				if (save_each) {
+					print_line("case 7g"); // TTTODO test
 					tab_closing_menu_option = current_menu_option;
 					for (int i = 0; i < editor_data.get_edited_scene_count(); i++) {
 						tabs_to_close.push_back(editor_data.get_scene_path(i));
 					}
+					// TTTODO 9
 					_proceed_closing_scene_tabs();
 				} else {
+					print_line("case 7h"); // TTTODO test
+					// TTTODO 0
 					String unsaved_scenes;
 					int i = _next_unsaved_scene(true, 0);
 					while (i != -1) {
@@ -3914,16 +3953,22 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 						i = _next_unsaved_scene(true, ++i);
 					}
 					if (is_restart) {
+						// TTTODO 6
+						print_line("case 5a"); // TTTODO test
 						save_confirmation->set_ok_button_text(TTR("Save & Reload"));
+						// TTTODO 1
 						save_confirmation->set_text(TTR("Save changes to the following scene(s) before reloading?") + unsaved_scenes);
 					} else {
 						save_confirmation->set_ok_button_text(TTR("Save & Quit"));
+						print_line("case 5b"); // TTTODO test
+						// TTTODO 1
 						save_confirmation->set_text((p_option == SCENE_QUIT ? TTR("Save changes to the following scene(s) before quitting?") : TTR("Save changes to the following scene(s) before opening Project Manager?")) + unsaved_scenes);
 					}
 					save_confirmation->reset_size();
 					save_confirmation->popup_centered();
 				}
 
+				print_line("case 7i"); // TTTODO test
 				DisplayServer::get_singleton()->window_request_attention();
 				break;
 			}
@@ -4264,6 +4309,7 @@ int EditorNode::_next_unsaved_scene(bool p_valid_filename, int p_start) {
 			return i;
 		} else {
 			for (int j = 0; j < editor_data.get_editor_plugin_count(); j++) {
+				// TTTODO 2
 				if (!editor_data.get_editor_plugin(j)->get_unsaved_status(scene_filename).is_empty()) {
 					return i;
 				}
@@ -4320,6 +4366,7 @@ void EditorNode::_discard_changes(const String &p_str) {
 				_remove_scene(tab_closing_idx);
 				scene_tabs->update_scene_tabs();
 			}
+			// TTTODO 9
 			_proceed_closing_scene_tabs();
 		} break;
 		case SCENE_RELOAD_SAVED_SCENE: {
@@ -4336,6 +4383,7 @@ void EditorNode::_discard_changes(const String &p_str) {
 			_restart_editor(true);
 		} break;
 		case PROJECT_RELOAD_CURRENT_PROJECT: {
+			// TTTODO 0
 			_restart_editor();
 		} break;
 		case TOOLS_CLEAR_PROJECT_CACHE: {
@@ -6822,6 +6870,7 @@ void EditorNode::_layout_menu_option(int p_id) {
 	}
 }
 
+// TTTODO 9
 void EditorNode::_proceed_closing_scene_tabs() {
 	List<String>::Element *E = tabs_to_close.front();
 	if (!E) {
@@ -6846,6 +6895,7 @@ void EditorNode::_proceed_closing_scene_tabs() {
 	}
 	ERR_FAIL_COND(tab_idx < 0);
 
+	// TTTODO 8
 	_scene_tab_closed(tab_idx);
 }
 
@@ -6913,6 +6963,7 @@ void EditorNode::_restart_editor(bool p_goto_project_manager) {
 	OS::get_singleton()->set_restart_on_exit(true, args);
 }
 
+// TTTODO 8
 void EditorNode::_scene_tab_closed(int p_tab) {
 	current_menu_option = SCENE_TAB_CLOSE;
 	tab_closing_idx = p_tab;
@@ -6935,6 +6986,7 @@ void EditorNode::_scene_tab_closed(int p_tab) {
 	} else {
 		// Check if any plugin has unsaved changes in that scene.
 		for (int i = 0; i < editor_data.get_editor_plugin_count(); i++) {
+			// TTTODO 2
 			unsaved_message = editor_data.get_editor_plugin(i)->get_unsaved_status(scene_filename);
 			if (!unsaved_message.is_empty()) {
 				break;
@@ -6943,6 +6995,7 @@ void EditorNode::_scene_tab_closed(int p_tab) {
 	}
 
 	if (!unsaved_message.is_empty()) {
+		// TTTODO 0
 		save_confirmation->set_ok_button_text(TTR("Save & Close"));
 		save_confirmation->set_text(unsaved_message + "\n\n" + TTR("Save before closing?"));
 		save_confirmation->reset_size();
@@ -7332,6 +7385,7 @@ void EditorNode::preload_reimporting_with_path_in_edited_scenes(const List<Strin
 	// Walk through each opened scene to get a global list of all instances which match
 	// the current reimported scenes.
 	for (int current_scene_idx = 0; current_scene_idx < editor_data.get_edited_scene_count(); current_scene_idx++) {
+		// TTTODO 5
 		progress.step(vformat(TTR("Analyzing scene %s"), editor_data.get_scene_title(current_scene_idx)), current_scene_idx);
 
 		Node *edited_scene_root = editor_data.get_edited_scene_root(current_scene_idx);
@@ -9022,6 +9076,7 @@ EditorNode::EditorNode() {
 	scene_tabs = memnew(EditorSceneTabs);
 	srt->add_child(scene_tabs);
 	scene_tabs->connect("tab_changed", callable_mp(this, &EditorNode::_set_current_scene));
+	// TTTODO 8
 	scene_tabs->connect("tab_closed", callable_mp(this, &EditorNode::_scene_tab_closed));
 
 	distraction_free = memnew(Button);

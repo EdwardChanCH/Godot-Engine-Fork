@@ -53,6 +53,7 @@
 #include "servers/display/display_server.h"
 
 void FileDialog::popup_file_dialog() {
+	print_line("popup_file_dialog()"); // TTTODO test
 	popup_centered_clamped(Vector2(1050, 700) * get_theme_default_base_scale(), 0.8f);
 	_focus_file_text();
 }

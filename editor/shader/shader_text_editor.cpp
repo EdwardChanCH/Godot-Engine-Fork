@@ -793,6 +793,7 @@ void ShaderTextEditor::_shader_changed() {
 	}
 	dependencies_changed = true;
 	_validate_script();
+	// TTTODO 4
 	if (edited_res->is_built_in() && previous_name != get_document_name()) {
 		previous_name = get_document_name();
 		emit_signal(SNAME("name_changed"));
