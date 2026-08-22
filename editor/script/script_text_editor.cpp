@@ -2182,6 +2182,7 @@ void ScriptTextEditor::drop_data_fw(const Point2 &p_point, const Variant &p_data
 
 		Ref<Script> script = edited_res;
 		if (!ClassDB::is_parent_class(script->get_instance_base_type(), "Node")) {
+			// TTTODO 4
 			EditorToaster::get_singleton()->popup_str(vformat(TTR("Can't drop nodes because script '%s' does not inherit Node."), get_document_name()), EditorToaster::SEVERITY_WARNING);
 			return;
 		}

@@ -377,10 +377,12 @@ private:
 	String defer_load_scene;
 	Node *_last_instantiated_scene = nullptr;
 
+	// TTTODO 7
 	ConfirmationDialog *confirmation = nullptr;
 	bool stop_project_confirmation = false;
 	bool stop_download_confirmation = false;
 	Button *confirmation_button = nullptr;
+	// TTTODO 7
 	ConfirmationDialog *save_confirmation = nullptr;
 	ConfirmationDialog *import_confirmation = nullptr;
 	ConfirmationDialog *pick_main_scene = nullptr;

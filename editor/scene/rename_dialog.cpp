@@ -457,6 +457,7 @@ String RenameDialog::_substitute(const String &subject, const Node *node, int co
 	// Always request the scene title with the extension stripped.
 	// Otherwise, the result could vary depending on whether a scene with the same name
 	// (but different extension) is currently open.
+	// TTTODO 5
 	result = result.replace("${SCENE}", EditorNode::get_editor_data().get_scene_title(current, true));
 
 	Node *root_node = SceneTree::get_singleton()->get_edited_scene_root();

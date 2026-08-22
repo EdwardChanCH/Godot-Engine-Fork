@@ -2461,6 +2461,7 @@ int EditorNode::_save_external_resources(bool p_also_save_external_data) {
 	if (p_also_save_external_data) {
 		for (int i = 0; i < editor_data.get_editor_plugin_count(); i++) {
 			EditorPlugin *plugin = editor_data.get_editor_plugin(i);
+			// TTTODO 2
 			if (!plugin->get_unsaved_status().is_empty()) {
 				plugin->save_external_data();
 				saved++;
@@ -2714,6 +2715,7 @@ bool EditorNode::is_scene_unsaved(int p_idx) {
 	if (!scene_path.is_empty()) {
 		// Check if scene has unsaved changes in built-in resources.
 		for (int j = 0; j < editor_data.get_editor_plugin_count(); j++) {
+			// TTTODO 2
 			if (!editor_data.get_editor_plugin(j)->get_unsaved_status(scene_path).is_empty()) {
 				return true;
 			}
@@ -3744,6 +3746,7 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 
 			if (unsaved_cache) {
 				if (!p_confirmed) {
+					// TTTODO 6
 					confirmation->set_ok_button_text(TTRC("Save & Reload"));
 					const String unsaved_message = _get_unsaved_scene_dialog_text(scene_filename, scene_time_opened);
 					confirmation->set_text(unsaved_message + "\n\n" + TTR("Save before reloading the scene?"));
@@ -3866,6 +3869,7 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 				if (_next_unsaved_scene(!save_each) == -1) {
 					if (EditorUndoRedoManager::get_singleton()->is_history_unsaved(EditorUndoRedoManager::GLOBAL_HISTORY)) {
 						if (is_restart) {
+							// TTTODO 6
 							save_confirmation->set_ok_button_text(TTR("Save & Reload"));
 							save_confirmation->set_text(TTR("Save modified resources before reloading?"));
 						} else {
@@ -3879,9 +3883,11 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 
 					plugin_to_save = nullptr;
 					for (int i = 0; i < editor_data.get_editor_plugin_count(); i++) {
+						// TTTODO 2
 						const String unsaved_status = editor_data.get_editor_plugin(i)->get_unsaved_status();
 						if (!unsaved_status.is_empty()) {
 							if (is_restart) {
+								// TTTODO 6
 								save_confirmation->set_ok_button_text(TTR("Save & Reload"));
 								save_confirmation->set_text(unsaved_status);
 							} else {
@@ -3917,10 +3923,13 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 						i = _next_unsaved_scene(true, ++i);
 					}
 					if (is_restart) {
+						// TTTODO 6
 						save_confirmation->set_ok_button_text(TTR("Save & Reload"));
+						// TTTODO 1
 						save_confirmation->set_text(TTR("Save changes to the following scene(s) before reloading?") + unsaved_scenes);
 					} else {
 						save_confirmation->set_ok_button_text(TTR("Save & Quit"));
+						// TTTODO 1
 						save_confirmation->set_text((p_option == SCENE_QUIT ? TTR("Save changes to the following scene(s) before quitting?") : TTR("Save changes to the following scene(s) before opening Project Manager?")) + unsaved_scenes);
 					}
 					save_confirmation->reset_size();
@@ -4269,6 +4278,7 @@ int EditorNode::_next_unsaved_scene(bool p_valid_filename, int p_start) {
 			return i;
 		} else {
 			for (int j = 0; j < editor_data.get_editor_plugin_count(); j++) {
+				// TTTODO 2
 				if (!editor_data.get_editor_plugin(j)->get_unsaved_status(scene_filename).is_empty()) {
 					return i;
 				}
@@ -6922,6 +6932,7 @@ void EditorNode::_scene_tab_closed(int p_tab) {
 	} else {
 		// Check if any plugin has unsaved changes in that scene.
 		for (int i = 0; i < editor_data.get_editor_plugin_count(); i++) {
+			// TTTODO 2
 			unsaved_message = editor_data.get_editor_plugin(i)->get_unsaved_status(scene_filename);
 			if (!unsaved_message.is_empty()) {
 				break;
@@ -7322,6 +7333,7 @@ void EditorNode::preload_reimporting_with_path_in_edited_scenes(const List<Strin
 	// Walk through each opened scene to get a global list of all instances which match
 	// the current reimported scenes.
 	for (int current_scene_idx = 0; current_scene_idx < editor_data.get_edited_scene_count(); current_scene_idx++) {
+		// TTTODO 5
 		progress.step(vformat(TTR("Analyzing scene %s"), editor_data.get_scene_title(current_scene_idx)), current_scene_idx);
 
 		Node *edited_scene_root = editor_data.get_edited_scene_root(current_scene_idx);

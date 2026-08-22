@@ -287,6 +287,7 @@ void EditorSceneTabs::update_scene_tabs() {
 	if (NativeMenu::get_singleton()->has_feature(NativeMenu::FEATURE_GLOBAL_MENU)) {
 		RID dock_rid = NativeMenu::get_singleton()->get_system_menu(NativeMenu::DOCK_MENU_ID);
 		for (int i = 0; i < EditorNode::get_editor_data().get_edited_scene_count(); i++) {
+			// TTTODO 5
 			int global_menu_index = NativeMenu::get_singleton()->add_item(dock_rid, EditorNode::get_editor_data().get_scene_title(i), callable_mp(this, &EditorSceneTabs::_global_menu_scene), Callable(), i);
 			scene_tabs->set_tab_metadata(i, global_menu_index);
 		}
@@ -305,6 +306,7 @@ void EditorSceneTabs::_update_tab_titles() {
 	Vector<String> disambiguated_scene_names;
 	Vector<String> full_path_names;
 	for (int i = 0; i < EditorNode::get_editor_data().get_edited_scene_count(); i++) {
+		// TTTODO 5
 		disambiguated_scene_names.append(EditorNode::get_editor_data().get_scene_title(i));
 		full_path_names.append(EditorNode::get_editor_data().get_scene_path(i));
 	}
@@ -337,6 +339,7 @@ void EditorSceneTabs::_update_tab_titles() {
 		if (NativeMenu::get_singleton()->has_feature(NativeMenu::FEATURE_GLOBAL_MENU)) {
 			RID dock_rid = NativeMenu::get_singleton()->get_system_menu(NativeMenu::DOCK_MENU_ID);
 			int global_menu_index = scene_tabs->get_tab_metadata(i);
+			// TTTODO 5
 			NativeMenu::get_singleton()->set_item_text(dock_rid, global_menu_index, EditorNode::get_editor_data().get_scene_title(i) + (unsaved ? "(*)" : ""));
 			NativeMenu::get_singleton()->set_item_tag(dock_rid, global_menu_index, i);
 		}

@@ -203,6 +203,7 @@ Variant DocumentList::get_drag_data_fw(const Point2 &p_point, Control *p_from) {
 
 	ScriptEditorBase *seb = Object::cast_to<ScriptEditorBase>(cur_node);
 	if (seb) {
+		// TTTODO 4
 		preview_name = seb->get_document_name();
 		preview_icon = seb->get_theme_icon();
 	}
@@ -1398,6 +1399,7 @@ void ScriptEditor::_queue_close_tabs() {
 		if (seb) {
 			// Maybe there are unsaved changes.
 			if (seb->is_unsaved()) {
+				// TTTODO 3
 				_ask_close_current_unsaved_tab(seb);
 				erase_tab_confirm->connect(SceneStringName(visibility_changed), callable_mp(this, &ScriptEditor::_queue_close_tabs), CONNECT_ONE_SHOT);
 				break;
@@ -1410,6 +1412,7 @@ void ScriptEditor::_queue_close_tabs() {
 }
 
 void ScriptEditor::_ask_close_current_unsaved_tab(ScriptEditorBase *p_seb) {
+	// TTTODO 1 4
 	erase_tab_confirm->set_text(TTR("Close and save changes?") + "\n\"" + p_seb->get_document_name() + "\"");
 	erase_tab_confirm->popup_centered();
 }
@@ -1918,6 +1921,7 @@ void ScriptEditor::_menu_option(int p_option) {
 		} break;
 		case FILE_MENU_CLOSE: {
 			if (seb && seb->is_unsaved()) {
+				// TTTODO 3
 				_ask_close_current_unsaved_tab(seb);
 			} else {
 				_close_current_tab(false);
@@ -2702,6 +2706,7 @@ PackedStringArray ScriptEditor::get_unsaved_scripts() const {
 	for (int i = 0; i < tab_container->get_tab_count(); i++) {
 		ScriptEditorBase *seb = Object::cast_to<ScriptEditorBase>(tab_container->get_tab_control(i));
 		if (seb && seb->is_unsaved()) {
+			// TTTODO 4
 			unsaved_list.append(seb->get_document_name());
 		}
 	}
@@ -3127,6 +3132,7 @@ void ScriptEditor::_update_filenames() {
 			unsaved.push_back(seb->is_unsaved());
 
 			const String &path = seb->get_edited_resource()->get_path();
+			// TTTODO 4
 			const String &name = seb->get_document_name();
 			String display_name;
 
@@ -3404,6 +3410,7 @@ void ScriptEditor::sort_document_editors() {
 
 			switch (document_sort_by_mode) {
 				case SORT_BY_NAME: {
+					// TTTODO 4
 					const String &name = seb->get_document_name();
 					item.sort_key = name.to_lower();
 				} break;
@@ -4606,6 +4613,7 @@ String ScriptEditorPlugin::get_unsaved_status(const String &p_for_scene) const {
 		}
 	}
 
+	// TTTODO 1
 	message.push_back(TTR("Save changes to the following file(s) before quitting?"));
 	message.append_array(unsaved_scripts);
 	return String("\n").join(message);

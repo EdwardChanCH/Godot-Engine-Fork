@@ -925,6 +925,7 @@ String EditorData::get_scene_title(int p_idx, bool p_always_strip_extension) con
 		return TTR("[empty]");
 	}
 	if (edited_scene[p_idx].root->get_scene_file_path().is_empty()) {
+		// TTTODO 1
 		return TTR("[unsaved]");
 	}
 
